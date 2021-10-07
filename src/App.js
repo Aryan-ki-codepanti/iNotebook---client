@@ -6,11 +6,17 @@ import About from "./components/About";
 import NoteState from "./context/notes/NoteState";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
+import { useState } from "react";
+import AlertState from "./context/alert/AlertState";
+import Alert from "./components/Alert";
 
 function App() {
+
+	
     return (
 	<>
 		<NoteState>
+		<AlertState>
 		<Router>
 			<Navbar />
 			<div className="container">
@@ -30,6 +36,7 @@ function App() {
 				</Switch>
 			</div>
 		</Router>
+		</AlertState>
 		</NoteState>
 	</>)
 };

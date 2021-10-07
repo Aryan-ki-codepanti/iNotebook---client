@@ -1,10 +1,14 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
+import { useHistory } from "react-router-dom";
+import AlertContext from "../context/alert/alertContext";
 import noteContext from "../context/notes/noteContext";
 import AddNote from "./AddNote";
 import NoteItem from "./NoteItem";
 
 const Notes = () => {
     const context = useContext(noteContext);
+    const history = useHistory();
+    const { showAlert } = useContext(AlertContext);
     const [note, setNote] = useState({
         id: "",
         etitle: "",
@@ -39,10 +43,17 @@ const Notes = () => {
     const handleClick = e => {
         updateNote(note.id, note.etitle, note.edescription, note.etag);
         refClose.current.click();
+        showAlert("Updated Successfully" , "success");
     };
 
     useEffect(() => {
-        getNotes();
+
+        if (localStorage.getItem("token")){
+            getNotes();
+        }
+        else{
+            history.push("/login");
+        }
     }, []); // eslint-disable-line
 
     return (
@@ -70,9 +81,11 @@ const Notes = () => {
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalLabel">
-                                {" "}
-                                Edit Note{" "}
+                            <h5 
+                            className="modal-title" 
+                            id="exampleModalLabel"
+                            >
+                                Edit Note
                             </h5>
                             <button
                                 type="button"
@@ -169,7 +182,7 @@ const Notes = () => {
             <div className="my-4">
                 <h1>Your Notes</h1>
 
-                <div className="container mx-2">
+                <div className="mx-2">
                     {notes.length === 0 && "No notes to display :) Add them"}
                 </div>
 

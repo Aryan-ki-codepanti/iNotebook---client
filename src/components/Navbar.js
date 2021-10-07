@@ -1,10 +1,17 @@
-import React from "react";
-import { Link , useLocation } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link , useLocation , useHistory } from "react-router-dom";
+import AlertContext from "../context/alert/alertContext";
+import Alert from "./Alert";
 
 const Navbar = () => {
     const location = useLocation();
+    const history = useHistory();
+    const { alert } = useContext(AlertContext);
 
-
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        history.push("/login");
+    };
 
     return (
         <div>
@@ -45,12 +52,15 @@ const Navbar = () => {
                             </li>
                         </ul>
                         <div className="d-flex gap-2">
-                            <Link to="/login" className="btn btn-primary">Login</Link>
-                            <Link to="/signup" className="btn btn-primary">Signup</Link>
+                            { !localStorage.getItem("token") ? (<><Link to="/login" className="btn btn-primary">Login</Link>
+                            <Link to="/signup" className="btn btn-primary">Signup</Link></>)
+                            : <button onClick={handleLogout} className="btn btn-primary"> Logout </button>
+                            }
                         </div>
                     </div>
                 </div>
             </nav>
+            <Alert alert={alert} />
         </div>
     );
 };

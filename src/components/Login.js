@@ -1,8 +1,10 @@
-import React , { useState } from 'react';
+import React , { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import AlertContext from '../context/alert/alertContext';
 
 const Login = () => {
     const history = useHistory();
+    const { showAlert } = useContext(AlertContext);
     const host = "http://localhost:5000";
     const [inputLogin , setInputLogin] = useState({
         email: "",
@@ -33,26 +35,29 @@ const Login = () => {
         if (data.success){
             // save token and redirect
             localStorage.setItem("token" , data.authToken);
+            showAlert("Logged in Successfully" , "success");
             history.push("/");
+
         }
         else{
-            alert("Invalid credentials");
+            showAlert("Invalid credentials" , "danger");
         }
 
     };
 
     return (
         <div className="my-5">
+            <h2> Login to use iNotebook </h2>
             <form onSubmit={handleOnSubmit} >
                 <div className="mb-3">
-                    <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
+                    <label htmlFor="email" className="form-label">Email address</label>
                     <input type="email" className="form-control" id="email" name="email" placeholder="Enter your Email"
                     value={inputLogin.email}
                     onChange={handleOnChange} />
                     
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
+                    <label htmlFor="password" className="form-label">Password</label>
                     <input type="password" className="form-control" id="password" name="password" placeholder="Enter your password"
                     value={inputLogin.password}
                     onChange={handleOnChange} />

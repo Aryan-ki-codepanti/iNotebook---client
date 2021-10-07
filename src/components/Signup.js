@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState , useContext } from "react";
 import { useHistory } from "react-router";
+import AlertContext from "../context/alert/alertContext";
 
 const Signup = () => {
     const history = useHistory();
+    const { showAlert } = useContext(AlertContext);
     const host = "http://localhost:5000";
     const [inputSignup, setInputSignup] = useState({
         name: "",
@@ -38,13 +40,15 @@ const Signup = () => {
             // save token and redirect
             localStorage.setItem("token", data.authToken);
             history.push("/");
+            showAlert("Account Created Successfully" , "success");
         } else {
-            alert("Invalid credentials");
+            showAlert("Invalid Details" , "danger");
         }
     };
 
     return (
         <div className="my-5">
+            <h2> Signup to use iNotebook </h2>
             <form onSubmit={handleOnSubmit}>
                 <div className="mb-3">
                     <label htmlFor="name" className="form-label">
