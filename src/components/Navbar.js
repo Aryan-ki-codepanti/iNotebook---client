@@ -44,20 +44,10 @@ const Navbar = () => {
                                 </Link>
                             </li>
                         </ul>
-                        <form className="d-flex">
-                            <input
-                                className="form-control me-2"
-                                type="search"
-                                placeholder="Search"
-                                aria-label="Search"
-                            />
-                            <button
-                                className="btn btn-outline-success"
-                                type="submit"
-                            >
-                                Search
-                            </button>
-                        </form>
+                        <div className="d-flex gap-2">
+                            <Link to="/login" className="btn btn-primary">Login</Link>
+                            <Link to="/signup" className="btn btn-primary">Signup</Link>
+                        </div>
                     </div>
                 </div>
             </nav>

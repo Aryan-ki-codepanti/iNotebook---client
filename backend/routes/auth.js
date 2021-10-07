@@ -19,9 +19,10 @@ router.post(
     async (req, res) => {
         // if errors return bad request
         const errors = validationResult(req);
-
+        let success = false;
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            
+            return res.status(400).json({ errors: errors.array() , success });
         } else {
             // check if user with this email exist
             const result = await User.findOne({ email: req.body.email });
@@ -29,17 +30,18 @@ router.post(
             if (result) {
                 return res
                     .status(400)
-                    .json({ error: "Sorry user with this email exists" });
+                    .json({ error: "Sorry user with this email exists" , success });
             }
 
             // securing password
             const salt = await bcrypt.genSalt(10);
             const secPass = await bcrypt.hash(req.body.password, salt);
 
+            success = true;
             const user = new User({ ...req.body, password: secPass });
             user.save().then(data => {
                 const authToken = jwt.sign({ user: data.id }, JWT_SECRET);
-                res.json({ authToken });
+                res.json({ authToken , success });
             }).catch(err => {
                 res.status(500).send("Internal server error occured");
             });
@@ -57,7 +59,7 @@ router.post(
     async (req, res) => {
         // if errors return bad request
         const errors = validationResult(req);
-
+        let success = false;
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
@@ -70,7 +72,7 @@ router.post(
             if (!user) {
                 return res
                     .status(400)
-                    .json({
+                    .json({success , 
                         error: "Please try to login with correct credentials",
                     });
                 }
@@ -80,7 +82,7 @@ router.post(
             if (!passCompare){
                 return res
                     .status(400)
-                    .json({
+                    .json({success,
                         error: "Please try to login with correct credentials",
                     });
 
@@ -91,9 +93,9 @@ router.post(
                     id: user.id
                 }
             }
-
+            success = true;
             const authToken = jwt.sign(payload , JWT_SECRET);
-            res.json({authToken});
+            res.json({success , authToken});
         
         }
 

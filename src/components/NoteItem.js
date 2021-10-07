@@ -4,7 +4,7 @@ import noteContext from "../context/notes/noteContext";
 
 const NoteItem = props => {
     const { handleUpdateNote , note } = props;
-    const { _id, title, description } = props.note;
+    const { _id, title, description , tag } = props.note;
     const { deleteNote } = useContext(noteContext);
     return (
         <div className="col-md-3">
@@ -17,6 +17,7 @@ const NoteItem = props => {
                     </div>
 
                     <p className="card-text">{description}</p>
+                    <p className="text-primary p-0 m-0">#{tag}</p>
                 </div>
             </div>
         </div> 
